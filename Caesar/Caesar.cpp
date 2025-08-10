@@ -16,64 +16,45 @@ using namespace std;
 * Les caractères spéciaux ne changent pas.
 */
 
+char shift(char c, const string& alphabet, int offset)
+{
+	// Cherche la position du caractère dans l'alphabet.
+	size_t pos = alphabet.find(c);
+
+	// Si le caractère n'est pas trouvé, aucun changement.
+	if (pos == string::npos) return c;
+
+	// Compatibilité avec les décalages négatifs ou supérieurs à la taille de l'alphabet.
+	// On utilisera le modulo pour calculer la nouvelle position.
+	size_t new_pos = (pos + offset + alphabet.size()) % alphabet.size();
+
+	// Renvoie le caractère de l'alphabet à la nouvelle position.
+	return alphabet[new_pos];
+}
+
 int main()
 {
 	string input, output;
 	int offset = 3;
+
 	string lowercase = "abcdefghijklmnopqrstuvwxyz";
 	string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	string digits = "0123456789";
 
 	// Attente de l'entrée utilisateur.
 	cout << u8"Entrez la chaîne de caractères à encoder." << endl;
 	cin >> input;
 
-	// Encodage grâce à une boucle for où i est le parcours de l'input par rapport à sa taille.
-	for (int i = 0, j = 0; i < input.size(); i++)
+	/*
+	* Pour chaque caractère de la chaîne d'entrée, on applique le décalage.
+	* La fonction shift est utilisée pour déterminer le nouveau caractère en fonction de l'alphabet approprié.
+	*/
+	for (char c : input)
 	{
-		// Uppercase.
-		if (input[i] >= 65 && input[i] <= 90)
-		{
-			// Récupère la position du caractère.
-			size_t pos = uppercase.find(input[i]);
-
-			// Gère les limites de l'offset acceptables grâce à modulo.
-			size_t new_pos = (pos + offset) % uppercase.size();
-
-			// Ajoute le caractère avec un décalage (encodage).
-			output.push_back(uppercase[new_pos]);
-		}
-
-		// Lowercase.
-		else if (input[i] >= 97 && input[i] <= 122)
-		{
-			// Récupère la position du caractère.
-			size_t pos = lowercase.find(input[i]);
-			
-			// Gère les limites de l'offset acceptables grâce à modulo.
-			size_t new_pos = (pos + offset) % lowercase.size();
-			
-			// Ajoute le caractère avec un décalage (encodage).
-			output.push_back(lowercase[new_pos]);
-		}
-
-		// Numerics.
-		else if (input[i] >= 48 && input[i] <= 57)
-		{
-			// Récupère la position du caractère (converti le caractère en entier).
-			size_t pos = input[i] - '0';
-			
-			// Gère les limites de l'offset acceptables grâce à modulo.
-			size_t new_pos = (pos + offset) % 10;
-			
-			// Ajoute le caractère avec un décalage (encodage).
-			output.push_back(new_pos + '0');
-		}
-
-		else
-		{
-			// Pour tout autre caractère, on le laisse tel quel.
-			output.push_back(input[i]);
-		}
+		if (islower(c)) output += shift(c, lowercase, offset);
+		else if (isupper(c)) output += shift(c, uppercase, offset);
+		else if (isdigit(c)) output += shift(c, digits, offset);
+		else output += c;
 	}
 
 	cout << "Résultat de l'encodage :" << endl;
