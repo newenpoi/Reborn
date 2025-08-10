@@ -117,7 +117,10 @@ void Garage::removeVehicle(int index)
         La gestion des pointeurs reste la responsabilité de l'utilisateur.
     */
 
+	// Libère la mémoire allouée pour le véhicule à l'index spécifié.
     delete m_pVehicles[index];
+
+    // Puis supprime le pointeur invalide de la liste.
     m_pVehicles.erase(m_pVehicles.begin() + index);
 }
 

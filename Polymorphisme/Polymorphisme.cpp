@@ -26,23 +26,26 @@ void introduction(Vehicle const& v)
 
 int main()
 {
+	// Créé un vecteur de pointeurs vers des véhicules.
     vector<Vehicle*> vehicles;
 
+	// Ajoute différents types de véhicules.
     vehicles.push_back(new Car(16000, 5));
-
     vehicles.push_back(new Car(32000, 3));
-
     vehicles.push_back(new Bike(4000, 320));
 
+	// Affiche les informations de chaque véhicule.
     vehicles[0]->show();
     vehicles[1]->show();
     vehicles[2]->show();
 
     // Libérer la mémoire.
-
     for (int i(0); i < vehicles.size(); ++i)
     {
+        // Supprime le véhicule (libère la mémoire) à l'indice i.
         delete vehicles[i];
+        
+		// Met à jour le pointeur pour éviter de pointer vers une adresse invalide.
         vehicles[i] = 0;
     }
 
